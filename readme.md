@@ -82,6 +82,7 @@ make all image into same 5472*3648 by rotate 90 degree, to ensure it can fit the
 - [x]  semantics perception block
 - [ ]  lighting acquisition block
 - [ ]  fusion adjustment block
+- [ ]  Bilateral grid of coefficients
 
 Downsample.py:
 
