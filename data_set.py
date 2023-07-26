@@ -1,38 +1,36 @@
 import os
+from torchvision.transforms import ToTensor
 from PIL import Image
+class Dataset():
+    def __init__(self, data_path, transform=None):
+        # self.input_path = os.path.join(data_path, "input")  # Path to the input data directory
+        # self.output_path = os.path.join(data_path, "output")  # Path to the output data directory
+        print(data_path)
+        print(os.listdir(data_path))
+        self.file_list = os.listdir(data_path)
+        self.transform = transform
+        self.filepath = data_path
+        print(data_path)
+    def __len__(self):
+        return len(self.file_list)
 
-# Directory containing the images
-directory =os.path.join( os.getcwd(), "full_resInput")
+    def __getitem__(self, idx):
+        input_file_name = self.file_list[idx]
+        output_file_name = input_file_name  
+        # input and output file names are the same
+        input_file_path = os.path.join(self.filepath, input_file_name)
+        output_file_path = os.path.join(self.filepath, output_file_name)
+        
+        
+        transform = ToTensor()
+        # Load and preprocess the input data
+        image = Image.open(input_file_path)
+        inputs = transform(image)
 
-# Output directory for compressed images
-output_directory = "low_resInput"
-input_path = os.path.join(output_directory)
-# output_path = os.path.join(output_directory, "output")
-# Create the output directory if it doesn't exist
-if not os.path.exists(output_directory):
-    os.makedirs(output_directory)
-    # if not os.path.exists(output_path):
-        # os.makedirs(output_path)
-# Iterate over all files in the directory
-# subdirectory
-# for subdirectory in os.listdir(directory):
-    # Iterate over all files in the directory
-    # if not subdirectory.startswith('.'):
-        # dirPath = os.path.join(directory, subdirectory)
-        # print(dirPath)
-for filename in os.listdir(directory):
-    print("prcessing : " + filename)
-    # Check if the file is an image 
-    if filename.lower().endswith(('.jpg', '.jpeg',)):
-        # Open the original image
-        original_image = Image.open(os.path.join(directory, filename))
-        # Resize from 5760x 3480 the image to the desired dimensions
-        compressed_image = original_image.resize((384, 384))
-        filename = "low_"+filename
-        # Save the compressed image in the output directory
-        # if(subdirectory=="input"):
-        compressed_image.save(os.path.join(input_path, filename))
-        print(os.path.join(input_path, filename))
-                # elif (subdirectory=="output"):
-                    # compressed_image.save(os.path.join(output_path, filename))
-print("done Preprocessing and saving image to Dir Compressed image")
+        # Load and preprocess the output data
+        image = Image.open(output_file_path)
+        targets = transform(image)
+
+
+        return inputs, targets
+    
